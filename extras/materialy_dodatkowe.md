@@ -41,3 +41,6 @@ https://devcorner.pl/gry-napisane-w-css/
 
 --- znaki specjalne w html ----
 https://ifj.edu.pl/private/krawczyk/kurshtml/znaki/znaki.htm
+
+# fastApi
+https://fastapi.tiangolo.com/pl/tutorial/

@@ -1,19 +1,22 @@
+from click import clear
 from fastapi import FastAPI, Request, Depends, HTTPException, Cookie
 from fastapi.responses import RedirectResponse
 from fastapi.responses import HTMLResponse
 
 import os
 from dotenv import load_dotenv
-
+import httpx
 from baza import init_db, get_user, add_user
+from jose import jwt, JWTError
 
+# pip install "python-jose[cryptography]"
 init_db()
 
 load_dotenv()
 app = FastAPI()
 
 JWT_SECRET = os.getenv("JWT_SECRET")
-JWT_ALGO = "H256"
+JWT_ALGO = "HS256"
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
@@ -21,6 +24,9 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 BACK_URI = os.getenv("BACK_URI")
 
 print(BACK_URI)
+
+GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
+GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -50,3 +56,39 @@ def login():
     return RedirectResponse(google_auth_url)
 
 
+@app.get("/auth/callback")
+async def auth_callback(request: Request):
+    code = request.query_params.get("code")
+    if not code:
+        raise HTTPException(400, "Brak kodu OAuth2")
+
+    # return "OK"
+    # wymiana code na access_token
+    async with httpx.AsyncClient() as client:
+        token_resp = await client.post(GOOGLE_TOKEN_URL,
+                                       data={
+                                           "client_id": CLIENT_ID,
+                                           "client_secret": CLIENT_SECRET,
+                                           "code": code,
+                                           "grant_type": "authorization_code",
+                                           "redirect_uri": REDIRECT_URI
+                                       })
+
+        token_data = token_resp.json()  # słownik
+        access_token = token_data.get("access_token")
+        if not access_token:
+            raise HTTPException(400, "Brak access token")
+
+        # pobranie user info
+        userinfo_resp = await client.get(
+            GOOGLE_USERINFO_URL, headers={"Authorization": f"Bearer {access_token}"}
+        )
+
+        userinfo = userinfo_resp.json()
+        email = userinfo.get("email")
+        print(email)
+        if not email:
+            raise HTTPException(400, "Brak e-mail w Google")
+
+    token = jwt.encode({"sub": email}, JWT_SECRET, algorithm=JWT_ALGO)
+    return {"access_token": token, "user": userinfo}

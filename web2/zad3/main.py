@@ -1,4 +1,4 @@
-from fastapi import FastAPI, BackgroundTasks
+from fastapi import FastAPI, BackgroundTasks, status
 from async_db import init_db, add_task, get_tasks
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
@@ -25,7 +25,7 @@ async def read_tasks():
     return {"tasks": [{"id": t[0], "title": t[1]} for t in tasks]}
 
 
-@app.post("/tasks/")
+@app.post("/tasks/", status_code=status.HTTP_201_CREATED)
 async def create_task(task: Task, background_tasks: BackgroundTasks):
     background_tasks.add_task(add_task, task.title)
     return {"message": "Task creation scheduled"}

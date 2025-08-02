@@ -44,3 +44,6 @@ https://ifj.edu.pl/private/krawczyk/kurshtml/znaki/znaki.htm
 
 # fastApi
 https://fastapi.tiangolo.com/pl/tutorial/
+
+# statusy http
+https://pl.wikipedia.org/wiki/Kod_odpowiedzi_HTTP

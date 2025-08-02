@@ -26,3 +26,4 @@ def hello_name(name: str):
 # http://127.0.0.1:8000
 #     127.0.0.1:62007 - "GET /ddd HTTP/1.1" 404 Not Found
 # uvicorn main:app --reload  - uruchomienie serwera
+# OpenAPi - Swagger

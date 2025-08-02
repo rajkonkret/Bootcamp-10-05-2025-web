@@ -21,3 +21,15 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 BACK_URI = os.getenv("BACK_URI")
 
 print(BACK_URI)
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return """
+    <html>
+    <head><title>Moja Apka</title></head>
+    <body>
+    <h1>Witaj!</h1>
+    <a href='/login'>Zaloguj się przez Google</a>
+    </body>
+    </html>
+    """

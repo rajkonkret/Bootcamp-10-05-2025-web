@@ -46,8 +46,8 @@ class CantorOffer:
 
 @app.route("/")
 def index():
-    return "This is index"
-
+    # return "This is index"
+    return render_template('index.html')
 
 # http://127.0.0.1:5000/exchange
 # jinja2 - silnik uzywany w renderowaniu templatek z kodu pythonowego

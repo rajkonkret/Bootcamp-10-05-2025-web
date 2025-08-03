@@ -17,6 +17,8 @@
         <img src="{{ url_for('static', filename='currencies/huf.jpg') }}">
      {% elif currency == "PLN" %}
         <img src="{{ url_for('static', filename='currencies/zloty.jpg') }}">
+    {% elif currency == "GBP" %}
+        <img src="{{ url_for('static', filename='currencies/gbp.png') }}">
     {% else %}
         <img src="{{ url_for('static', filename='kantor.png') }}">
     {% endif %}

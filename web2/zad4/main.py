@@ -91,4 +91,39 @@ async def auth_callback(request: Request):
             raise HTTPException(400, "Brak e-mail w Google")
 
     token = jwt.encode({"sub": email}, JWT_SECRET, algorithm=JWT_ALGO)
-    return {"access_token": token, "user": userinfo}
+    # return {"access_token": token, "user": userinfo}
+
+    response = RedirectResponse(url="/me")
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        max_age=3600,
+        samesite="lax"
+    )
+    return response
+
+
+@app.get("/me", response_class=HTMLResponse)
+def me(request: Request, access_token: str = Cookie(None)):
+    if not access_token:
+        return HTMLResponse(
+            "<h2>Brak tokena - nie jesteś zalogowany.</h2><h2><a href='/'>Logowanie</a>", status_code=401)
+    try:
+        payload = jwt.decode(access_token, JWT_SECRET, algorithms=[JWT_ALGO])
+        user = payload.get("sub")
+        user_in_db = get_user(user)
+        is_new = False
+        return f"""
+        <html>
+        <head><title>Konto</title></head>
+        <body>
+        <h1>Zalogowana jako: {user}</h1>
+        <a href='/logout'>Wyloguj się</a>
+        </body>
+        </html>
+        """
+    except JWTError:
+        return HTMLResponse(
+            "<h1>Błąd tokena</h1><a href='/'>Logowanie</a>", status_code=401
+        )

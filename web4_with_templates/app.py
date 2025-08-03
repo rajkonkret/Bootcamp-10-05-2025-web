@@ -1,7 +1,8 @@
 from flask import Flask, render_template, url_for, request, flash
 
 app = Flask(__name__)
-
+# dodajemy secret_key  aby komunikacja flash wykonałą sie w bezpieczny sposób
+app.config['SECRET_KEY'] = "KluczTrudnyDoZlamania123!!!"
 
 class Currency:
     def __init__(self, code, name, flag):

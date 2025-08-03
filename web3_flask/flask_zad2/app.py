@@ -24,7 +24,18 @@ def index():
     if 'style' in request.args:
         style = request.args['style']
 
+    for p in request.args:
+        print(p, request.args[p])
+        # color blue
+        # style italic
+
+    # http://127.0.0.1:5000/?color=red
+    # http://127.0.0.1:5000/?color=blue&style=italic
+    # http://127.0.0.1:5000/?color=blue&style=italic">Hacked<
+    # color blue
+    # style italic">Hacked<
     # return '<h1>Hello World!</h1>'
+    #  http://127.0.0.1:5000/?color=red&style=italic;%22%3EHacked%3Ch1%20style=%22font-style:italic
     return f'<h1 style="color: {color}; font-style:{style};">Hello World!</h1>'
 
 

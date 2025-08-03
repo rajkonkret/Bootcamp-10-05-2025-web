@@ -1,37 +1,13 @@
-{% from "macros.html" import show_flash_message, show_all_flash_message %}
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Cantor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-<!--    {% for message in get_flashed_messages() %}-->
-<!--        {{ show_flash_message(message) }}-->
-<!--    {% endfor %}-->
-    {{ show_all_flash_message() }}
+{% extends "base.html" %}
 
+{% block body_header %}
     <h1>You selected {{ currency }} and amount {{ amount }}</h1>
-<!--    <img src="/static/kantor.png">-->
-<!--    <img src="{{ url_for('static', filename='kantor.png') }}">-->
-<!--    {% if currency == 'EUR' %}-->
-<!--        <img src="{{ url_for('static', filename='currencies/euro.jpg') }}">-->
-<!--    {% elif currency == "USD" %}-->
-<!--        <img src="{{ url_for('static', filename='currencies/dollar.png') }}">-->
-<!--    {% elif currency == "HUF" %}-->
-<!--        <img src="{{ url_for('static', filename='currencies/huf.jpg') }}">-->
-<!--     {% elif currency == "PLN" %}-->
-<!--        <img src="{{ url_for('static', filename='currencies/zloty.jpg') }}">-->
-<!--    {% elif currency == "GBP" %}-->
-<!--        <img src="{{ url_for('static', filename='currencies/gbp.png') }}">-->
-<!--    {% else %}-->
-<!--        <img src="{{ url_for('static', filename='kantor.png') }}">-->
-<!--    {% endif %}-->
+{% endblock %}
+
+{% block body_content %}
     {% if currency_info != 'unknown' %}
         <img src="{{ url_for('static', filename=currency_info.flag) }}">
     {% else %}
     <p>This currency is unknow for us</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}

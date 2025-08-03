@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block body_content %}
+    {{ super() }}
+
     {% if currency_info != 'unknown' %}
         <img src="{{ url_for('static', filename=currency_info.flag) }}">
     {% else %}

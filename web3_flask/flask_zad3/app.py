@@ -1,0 +1,92 @@
+from idlelib.autocomplete import TRY_A
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def index():
+    # dla b'color=blue'
+    # http://127.0.0.1:5000/?color=blue
+    # dla http://127.0.0.1:5000/?color=blue&style=italic
+    # b'color=blue&style=italic'
+    print(request.query_string)
+    # print(request.args['color']) # blue
+    # print(request.args['color1']) # exceptions.BadRequestKeyError
+
+    color = "black"
+    if 'color' in request.args:
+        # print(request.args['color']) # b'color=red'
+        color = request.args['color']
+
+    style = 'normal'
+    if 'style' in request.args:
+        style = request.args['style']
+
+    for p in request.args:
+        print(p, request.args[p])
+        # color blue
+        # style italic
+
+    # http://127.0.0.1:5000/?color=red
+    # http://127.0.0.1:5000/?color=blue&style=italic
+    # http://127.0.0.1:5000/?color=blue&style=italic">Hacked<
+    # color blue
+    # style italic">Hacked<
+    # return '<h1>Hello World!</h1>'
+    #  http://127.0.0.1:5000/?color=red&style=italic;%22%3EHacked%3Ch1%20style=%22font-style:italic
+    return f'<h1 style="color: {color}; font-style:{style};">Hello World!</h1>'
+
+
+@app.route("/cantor/<string:currency>/<int:amount>")
+def cantor(currency, amount):  # nazwy zmiennych odpowiadaja nazwą parametrów w url
+    message = f"<h1>You selected {currency} and {amount}</h1>"
+    return message
+
+
+@app.route("/exchange", methods=['GET', 'POST'])
+def exchange():
+    # <form id="exchange_form" action="/exchange_process" method="POST">
+    print(request.method)
+
+    if request.method == 'GET':
+        body = """
+        <form id="exchange_form" action="/exchange" method="POST">
+        <label for="currency">Currency</label>
+        <input type="text" id="currency" name="currency" value="EUR"><br>
+        <label for="amount">Amount</label>
+        <input type="text" id="amount" name="amount" value="100"><br>
+        <input type="submit" value="Send">
+        </form>
+        """
+        return body
+    else:
+        currency = "EUR"
+        if "currency" in request.form:
+            currency = request.form['currency']
+
+        amount = 250
+        if 'amount' in request.form:
+            amount = request.form['amount']
+
+        body = f"You want to exchange {amount} {currency}"
+        return body
+
+
+@app.route("/exchange_process", methods=['POST'])
+def exchange_process():
+    currency = "EUR"
+    if "currency" in request.form:
+        currency = request.form['currency']
+
+    amount = 250
+    if 'amount' in request.form:
+        amount = request.form['amount']
+
+    body = f"You want to exchange {amount} {currency}"
+    return body
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

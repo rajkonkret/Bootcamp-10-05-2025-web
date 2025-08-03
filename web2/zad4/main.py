@@ -1,4 +1,3 @@
-from click import clear
 from fastapi import FastAPI, Request, Depends, HTTPException, Cookie
 from fastapi.responses import RedirectResponse
 from fastapi.responses import HTMLResponse
@@ -127,3 +126,16 @@ def me(request: Request, access_token: str = Cookie(None)):
         return HTMLResponse(
             "<h1>Błąd tokena</h1><a href='/'>Logowanie</a>", status_code=401
         )
+
+
+@app.get("/logout", response_class=HTMLResponse)
+def logout(request: Request):
+    return f"""
+            <html>
+            <head><title>wylogowano</title></head>
+            <body>
+            <h1>Wylogowano!</h1>
+            <a href='/'>Powrót do strony głównej</a>
+            </body>
+            </html>
+            """

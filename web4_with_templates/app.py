@@ -1,5 +1,3 @@
-from http.cookiejar import offset_from_tz_string
-
 from flask import Flask, render_template, url_for, request
 
 app = Flask(__name__)

@@ -1,42 +1,52 @@
 from idlelib.autocomplete import TRY_A
 
-from flask import Flask, request
+from flask import Flask, request, url_for
 
 app = Flask(__name__)
 
 
+# url_for('exchange') - podajemy nazwę metody a nie url
 @app.route("/")
 def index():
-    # dla b'color=blue'
-    # http://127.0.0.1:5000/?color=blue
-    # dla http://127.0.0.1:5000/?color=blue&style=italic
-    # b'color=blue&style=italic'
-    print(request.query_string)
-    # print(request.args['color']) # blue
-    # print(request.args['color1']) # exceptions.BadRequestKeyError
+    menu = f'''
+    Go <a href="{url_for('exchange')}">here</a> to echange money<br>
+    To exchange 50 SEK go <a href="{url_for('cantor', currency='SEK', amount=50)}">here</a>
+'''
+    return f'<h1>Hello World!</h1><br>{menu}'
 
-    color = "black"
-    if 'color' in request.args:
-        # print(request.args['color']) # b'color=red'
-        color = request.args['color']
 
-    style = 'normal'
-    if 'style' in request.args:
-        style = request.args['style']
-
-    for p in request.args:
-        print(p, request.args[p])
-        # color blue
-        # style italic
-
-    # http://127.0.0.1:5000/?color=red
-    # http://127.0.0.1:5000/?color=blue&style=italic
-    # http://127.0.0.1:5000/?color=blue&style=italic">Hacked<
-    # color blue
-    # style italic">Hacked<
-    # return '<h1>Hello World!</h1>'
-    #  http://127.0.0.1:5000/?color=red&style=italic;%22%3EHacked%3Ch1%20style=%22font-style:italic
-    return f'<h1 style="color: {color}; font-style:{style};">Hello World!</h1>'
+# @app.route("/")
+# def index():
+#     # dla b'color=blue'
+#     # http://127.0.0.1:5000/?color=blue
+#     # dla http://127.0.0.1:5000/?color=blue&style=italic
+#     # b'color=blue&style=italic'
+#     print(request.query_string)
+#     # print(request.args['color']) # blue
+#     # print(request.args['color1']) # exceptions.BadRequestKeyError
+#
+#     color = "black"
+#     if 'color' in request.args:
+#         # print(request.args['color']) # b'color=red'
+#         color = request.args['color']
+#
+#     style = 'normal'
+#     if 'style' in request.args:
+#         style = request.args['style']
+#
+#     for p in request.args:
+#         print(p, request.args[p])
+#         # color blue
+#         # style italic
+#
+#     # http://127.0.0.1:5000/?color=red
+#     # http://127.0.0.1:5000/?color=blue&style=italic
+#     # http://127.0.0.1:5000/?color=blue&style=italic">Hacked<
+#     # color blue
+#     # style italic">Hacked<
+#     # return '<h1>Hello World!</h1>'
+#     #  http://127.0.0.1:5000/?color=red&style=italic;%22%3EHacked%3Ch1%20style=%22font-style:italic
+#     return f'<h1 style="color: {color}; font-style:{style};">Hello World!</h1>'
 
 
 @app.route("/cantor/<string:currency>/<int:amount>")
@@ -45,6 +55,8 @@ def cantor(currency, amount):  # nazwy zmiennych odpowiadaja nazwą parametrów 
     return message
 
 
+# http://127.0.0.1:5000/exchange
+# https://flask.palletsprojects.com/en/stable/api/#flask.request
 @app.route("/exchange", methods=['GET', 'POST'])
 def exchange():
     # <form id="exchange_form" action="/exchange_process" method="POST">

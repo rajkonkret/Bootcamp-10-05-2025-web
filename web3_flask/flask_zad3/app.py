@@ -1,6 +1,4 @@
-from idlelib.autocomplete import TRY_A
-
-from flask import Flask, request, url_for
+from flask import Flask, request, url_for, redirect
 
 app = Flask(__name__)
 
@@ -9,7 +7,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     menu = f'''
-    Go <a href="{url_for('exchange')}">here</a> to echange money<br>
+    Go <a href="{url_for('exchange')}">here</a> to exchange money<br>
     To exchange 50 SEK go <a href="{url_for('cantor', currency='SEK', amount=50)}">here</a>
 '''
     return f'<h1>Hello World!</h1><br>{menu}'
@@ -60,11 +58,12 @@ def cantor(currency, amount):  # nazwy zmiennych odpowiadaja nazwą parametrów 
 @app.route("/exchange", methods=['GET', 'POST'])
 def exchange():
     # <form id="exchange_form" action="/exchange_process" method="POST">
+    # <form id="exchange_form" action="/exchange" method="POST">
     print(request.method)
 
     if request.method == 'GET':
-        body = """
-        <form id="exchange_form" action="/exchange" method="POST">
+        body = f"""
+        <form id="exchange_form" action="{url_for('exchange')}" method="POST">
         <label for="currency">Currency</label>
         <input type="text" id="currency" name="currency" value="EUR"><br>
         <label for="amount">Amount</label>
@@ -83,7 +82,9 @@ def exchange():
             amount = request.form['amount']
 
         body = f"You want to exchange {amount} {currency}"
-        return body
+        # return body
+        # return redirect(url_for('index')) # przekierowanie do funkcji index()
+        return redirect(url_for('cantor', currency=currency, amount=amount))
 
 
 @app.route("/exchange_process", methods=['POST'])

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<form id="exchange_form" action="" method="POST">
+<form id="exchange_form" action="{{ url_for('exchange') }}" method="POST">
     <label for="currency">Currency</label>
     <input type="text" id="currency" name="currency" value="EUR"><br>
     <label for="amount">Amount</label>

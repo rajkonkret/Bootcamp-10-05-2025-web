@@ -160,8 +160,14 @@ def edit_transaction(transaction_id):
             flash("The selected currency is unknown and cannot be accepted")
         else:
             db = get_db()
-            sql_command = "INSERT INTO transactions(currency, amount, user) VALUES (?, ?, ?)"
-            db.execute(sql_command, (currency, amount, 'admin'))
+            sql_command = """
+            UPDATE transactions SET
+            currency=?,
+            amount=?,
+            user=?
+            WHERE id=?;
+            """
+            db.execute(sql_command, (currency, amount, 'admin', transaction_id))
             db.commit()
             flash(f"Request to exchange {currency} was accepted")
 

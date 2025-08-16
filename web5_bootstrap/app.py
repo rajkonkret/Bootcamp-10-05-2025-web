@@ -68,7 +68,7 @@ class CantorOffer:
 @app.route("/")
 def index():
     # return "This is index"
-    return render_template('index.html')
+    return render_template('index.html', active_menu='home')
 
 
 # http://127.0.0.1:5000/exchange
@@ -80,7 +80,7 @@ def exchange():
     offer.load_offer()
 
     if request.method == "GET":
-        return render_template('exchange.html', offer=offer)
+        return render_template('exchange.html', active_menu='exchange', offer=offer)
     else:
         currency = "EUR"
         if "currency" in request.form:
@@ -102,6 +102,7 @@ def exchange():
             flash(f"Request to exchange {currency} was accepted")
 
         return render_template('exchange_results.html',
+                               active_menu='exchange',
                                currency=currency,
                                amount=amount,
                                currency_info=offer.get_by_code(currency))
@@ -114,7 +115,7 @@ def history():
     cur = db.execute(sql_command)
     transactions = cur.fetchall()  # dostaniemy liste transakcji z bazy
 
-    return render_template('history.html', transactions=transactions)
+    return render_template('history.html',active_menu='history', transactions=transactions)
 
 
 if __name__ == '__main__':

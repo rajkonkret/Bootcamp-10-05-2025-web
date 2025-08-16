@@ -107,6 +107,16 @@ def exchange():
                                currency_info=offer.get_by_code(currency))
 
 
+@app.route('/history')
+def history():
+    db = get_db()
+    sql_command = 'SELECT id, currency, amount FROM transactions;'
+    cur = db.execute(sql_command)
+    transactions = cur.fetchall()  # dostaniemy liste transakcji z bazy
+
+    return render_template('history.html', transactions=transactions)
+
+
 if __name__ == '__main__':
     # app.run(debug=True, port=5000)
     app.run(debug=True, port=5005)

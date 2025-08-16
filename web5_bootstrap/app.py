@@ -1,6 +1,11 @@
 from flask import Flask, render_template, url_for, request, flash, g, redirect
 import sqlite3
 
+import random
+import string
+import hashlib
+import binascii
+
 app_info = {
     'db_file': 'data/cantor.db'
 }

@@ -169,13 +169,9 @@ def edit_transaction(transaction_id):
             """
             db.execute(sql_command, (currency, amount, 'admin', transaction_id))
             db.commit()
-            flash(f"Request to exchange {currency} was accepted")
+            flash(f"Transaction was updated!")
 
-        return render_template('exchange_results.html',
-                               active_menu='exchange',
-                               currency=currency,
-                               amount=amount,
-                               currency_info=offer.get_by_code(currency))
+        return redirect(url_for('history'))
 
 
 if __name__ == '__main__':

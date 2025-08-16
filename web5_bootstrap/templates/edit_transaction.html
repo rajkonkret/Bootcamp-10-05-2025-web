@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+
+{% block body_content %}
+<div class="container">
+    <div class="row justify-content-start">
+        <h1 class="h2 mb-4">Edit Transaction</h1>
+    </div>
+<form action="{{ url_for('edit_transaction', transaction_id=transaction.id) }}" method="POST">
+  <div class="mb-3">
+    <label for="currency" class="form-label">Currency</label>
+    <select id="currency" name="currency" class="form-select" required>
+        {% for currency in offer.currencies %}
+        <option value="{{ currency.code }}">{{ 'selected' if transaction.currency==currency.code }}>{{ currency.name }}</option>
+        {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="amount" class="form-label">Amount</label>
+    <input type="number"
+           class="form-control"
+           id="amount"
+           name="amount"
+           value="{{ transaction.amount }}">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+{% endblock %}

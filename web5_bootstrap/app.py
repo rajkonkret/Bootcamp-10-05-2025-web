@@ -115,12 +115,11 @@ def history():
     cur = db.execute(sql_command)
     transactions = cur.fetchall()  # dostaniemy liste transakcji z bazy
 
-    return render_template('history.html',active_menu='history', transactions=transactions)
+    return render_template('history.html', active_menu='history', transactions=transactions)
 
 
 @app.route('/delete_transaction/<int:transaction_id>')
 def delete_transaction(transaction_id):
-
     db = get_db()
     sql_statement = 'DELETE FROM transactions WHERE id = ?'
     db.execute(sql_statement, (transaction_id,))
@@ -128,6 +127,49 @@ def delete_transaction(transaction_id):
 
     return redirect(url_for('history'))
 
+
+@app.route('/edit_transaction/<int:transaction_id>', methods=['GET', 'POST'])
+def edit_transaction(transaction_id):
+    offer = CantorOffer()
+    offer.load_offer()
+    db = get_db()
+
+    if request.method == "GET":
+        sql_statement = "SELECT id, currency, amount FROM transactions WHERE id=?"
+        cur = db.execute(sql_statement, (transaction_id,))
+        transaction = cur.fetchone()  # pobranie jedego rekordu
+
+        if transaction == None:
+            flash("No such transaction!")
+            return redirect(url_for('history'))
+        else:
+            return render_template('edit_transaction.html', transaction=transaction,
+                                   offer=offer, active_menu='history')
+    else:
+        currency = "EUR"
+        if "currency" in request.form:
+            currency = request.form['currency']
+
+        amount = 250
+        if 'amount' in request.form:
+            amount = request.form['amount']
+
+        if currency in offer.denied_codes:
+            flash(f"The currency {currency} cannot be accepted")
+        elif offer.get_by_code(currency) == "unknown":
+            flash("The selected currency is unknown and cannot be accepted")
+        else:
+            db = get_db()
+            sql_command = "INSERT INTO transactions(currency, amount, user) VALUES (?, ?, ?)"
+            db.execute(sql_command, (currency, amount, 'admin'))
+            db.commit()
+            flash(f"Request to exchange {currency} was accepted")
+
+        return render_template('exchange_results.html',
+                               active_menu='exchange',
+                               currency=currency,
+                               amount=amount,
+                               currency_info=offer.get_by_code(currency))
 
 
 if __name__ == '__main__':

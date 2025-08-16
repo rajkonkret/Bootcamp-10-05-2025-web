@@ -18,10 +18,12 @@ def get_db():
 
     return g.sqlite_db
 
+
 @app.teardown_appcontext
 def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
+
 
 class Currency:
     def __init__(self, code, name, flag):
@@ -84,16 +86,20 @@ def exchange():
         if "currency" in request.form:
             currency = request.form['currency']
 
+        amount = 250
+        if 'amount' in request.form:
+            amount = request.form['amount']
+
         if currency in offer.denied_codes:
             flash(f"The currency {currency} cannot be accepted")
         elif offer.get_by_code(currency) == "unknown":
             flash("The selected currency is unknown and cannot be accepted")
         else:
+            db = get_db()
+            sql_command = "INSERT INTO transactions(currency, amount, user) VALUES (?, ?, ?)"
+            db.execute(sql_command, (currency, amount, 'admin'))
+            db.commit()
             flash(f"Request to exchange {currency} was accepted")
-
-        amount = 250
-        if 'amount' in request.form:
-            amount = request.form['amount']
 
         return render_template('exchange_results.html',
                                currency=currency,

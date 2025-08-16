@@ -95,6 +95,16 @@ class UserPass:
         pwdhash = binascii.hexlify(pwdhash).decode('ascii')
         return pwdhash == stored_password
 
+    def get_random_user_password(self):
+        random_user = ''.join(random.choice(string.ascii_lowercase) for i in range(3))
+        self.user = random_user
+
+        password_characters = string.ascii_letters  # + string.digits + string.punctations
+        random_password = ''.join(random.choice(password_characters) for i in range(3))
+        self.password = random_password
+
+
+
 
 @app.route("/")
 def index():

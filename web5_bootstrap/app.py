@@ -118,6 +118,18 @@ def history():
     return render_template('history.html',active_menu='history', transactions=transactions)
 
 
+@app.route('/delete_transaction/<int:transaction_id>')
+def delete_transaction(transaction_id):
+
+    db = get_db()
+    sql_statement = 'DELETE FROM transactions WHERE id = ?'
+    db.execute(sql_statement, (transaction_id,))
+    db.commit()
+
+    return render_template(url_for('history'))
+
+
+
 if __name__ == '__main__':
     # app.run(debug=True, port=5000)
     app.run(debug=True, port=5005)

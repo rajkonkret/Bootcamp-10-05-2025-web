@@ -1,15 +1,18 @@
 {% extends "base.html" %}
 
-{% block body_header %}
-    <h1>You selected {{ currency }} and amount {{ amount }}</h1>
-{% endblock %}
 
 {% block body_content %}
-    {{ super() }}
-
-    {% if currency_info != 'unknown' %}
-        <img src="{{ url_for('static', filename=currency_info.flag) }}">
+<div class="container">
+      {% if currency_info != 'unknown' %}
+        <div class="col-2"></div>
+         <div class="col"><img src="{{ url_for('static', filename=currency_info.flag) }}"
+                              class="img-fluid rounded-circle mx-auto d-block"
+            alt="Currency logo">
+            </div>
+        <div class="col-2"></div>
     {% else %}
     <p>This currency is unknow for us</p>
     {% endif %}
+</div>
+
 {% endblock %}

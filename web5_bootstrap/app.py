@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, flash, g
+from flask import Flask, render_template, url_for, request, flash, g, redirect
 import sqlite3
 
 app_info = {
@@ -126,7 +126,7 @@ def delete_transaction(transaction_id):
     db.execute(sql_statement, (transaction_id,))
     db.commit()
 
-    return render_template(url_for('history'))
+    return redirect(url_for('history'))
 
 
 

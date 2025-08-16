@@ -1,8 +1,6 @@
 from flask import flash, render_template, Flask
-from flask_bootstrap import Bootstrap
-
+# uninstall flask-bootstrap
 app = Flask(__name__)
-bootstrap = Bootstrap(app)
 
 
 @app.route("/")

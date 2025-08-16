@@ -11,7 +11,7 @@
     <label for="currency" class="form-label">Currency</label>
     <select id="currency" name="currency" class="form-select" required>
         {% for currency in offer.currencies %}
-        <option value="{{ currency.code }}">{{ 'selected' if transaction.currency==currency.code }}>{{ currency.name }}</option>
+        <option value="{{ currency.code }}" {{ 'selected' if transaction.currency==currency.code }}>{{ currency.name }}</option>
         {% endfor %}
     </select>
   </div>

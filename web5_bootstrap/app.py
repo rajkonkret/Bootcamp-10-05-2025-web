@@ -1,9 +1,27 @@
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, g
+import sqlite3
+
+app_info = {
+    'db_file': 'data/cantor.db'
+}
 
 app = Flask(__name__)
 # dodajemy secret_key  aby komunikacja flash wykonałą sie w bezpieczny sposób
 app.config['SECRET_KEY'] = "KluczTrudnyDoZlamania123!!!"
 
+
+def get_db():
+    if not hasattr(g, 'sqlite_db'):
+        conn = sqlite3.connect(app_info['db_file'])
+        conn.row_factory = sqlite3.Row  # dostaniemy dane w postaci słownika
+        g.sqlite_db = conn
+
+    return g.sqlite_db
+
+@app.teardown_appcontext
+def close_db(error):
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
 
 class Currency:
     def __init__(self, code, name, flag):

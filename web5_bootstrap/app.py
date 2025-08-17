@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request, flash, g, redirect
+from flask import Flask, render_template, url_for, request, flash, g, redirect, session
 import sqlite3
 
 import random
@@ -103,6 +103,21 @@ class UserPass:
         random_password = ''.join(random.choice(password_characters) for i in range(3))
         self.password = random_password
 
+    def login_user(self):
+
+        db = get_db()
+        sql_statement = 'SELECT id, name, email, password, is_active, is_admin from users where name=?'
+        # cur = db.execute(sql_statement, [self.user])
+        cur = db.execute(sql_statement, (self.user,))
+        user_record = cur.fetchone()  # jako słownik
+
+        if user_record != None and self.verify_password(user_record['password'], self.password):
+            return user_record
+        else:
+            self.user = None
+            self.password = None
+            return None
+
 
 @app.route("/init_app")
 def init_app():
@@ -121,9 +136,10 @@ def init_app():
     db.execute("""
     INSERT INTO users(name, email, password, is_active, is_admin)
     VALUES (?,?,?,True,True);""",
-               (user_pass, "radek@radek.pl", user_pass.hash_password()))
+               (user_pass.user, "radek@radek.pl", user_pass.hash_password()))
     db.commit()
 
+    # User cim with password QRg has been created.
     flash(f"User {user_pass.user} with password {user_pass.password} has been created.")
     return redirect(url_for('index'))
 

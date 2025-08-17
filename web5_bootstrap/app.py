@@ -305,7 +305,54 @@ def delete_user(user_name):
 
 @app.route("/new_user", methods=['GET', 'POST'])
 def new_user():
-    return "not implemented"
+    # return "not implemented"
+    if not 'user' in session:
+        return redirect(url_for('login'))
+    login = session['user']
+
+    db = get_db()
+    message = None
+    user = {}
+
+    if request.method == 'GET':
+        return render_template('new_user.html', active_menu='users', user=user)
+    else:
+        user['user_name'] = '' if not "user_name" in request.form else request.form['user_name']
+        user['email'] = '' if not "email" in request.form else request.form['email']
+        user['user_pass'] = '' if not "user_pass" in request.form else request.form['user_pass']
+
+        cur = db.execute('SELECT count(*) as cnt FROM users WHERE name=?;', (user['user_name'],))
+        record = cur.fetchone()
+        is_user_name_unique = (record['cnt'] == 0)
+
+        cur = db.execute('SELECT count(*) as cnt FROM users WHERE email=?;', (user['email'],))
+        record = cur.fetchone()
+        is_user_email_unique = (record['cnt'] == 0)
+
+        if user['user_name'] == "":
+            message = "Name cannot be empty"
+        elif user['email'] == '':
+            message = "Email cannot be empty"
+        elif user['user_pass'] == '':
+            message = "Password cannot be empty"
+        elif not is_user_name_unique:
+            message = f"User with the name {user['user_name']} already exists"
+        elif not is_user_email_unique:
+            message = f"User with the email {user['email']} already exists"
+
+        if not message:
+            user_pass = UserPass(user["user_name"], user['user_pass'])
+            password_hash = user_pass.hash_password()
+            sql_statement = """INSERT INTO users(name, email, password, is_active, is_admin)
+            VALUES(?,?,?,True,False);"""
+
+            db.execute(sql_statement, (user['user_name'], user['email'], password_hash))
+            db.commit()
+            flash(f"User {user['user_name']} created.")
+            return redirect(url_for('users'))
+        else:
+            flash(f"Corect error: {message}")
+            return render_template('new_user.html', active_menu="users", user=user)
 
 
 if __name__ == '__main__':

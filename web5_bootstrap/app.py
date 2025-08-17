@@ -170,6 +170,7 @@ def init_app():
     db.commit()
 
     # User cim with password QRg has been created.
+    # User oba with password vkd has been created.
     flash(f"User {user_pass.user} with password {user_pass.password} has been created.")
     return redirect(url_for('index'))
 
@@ -293,6 +294,7 @@ def users():
 
     return render_template('users.html', active_menu="users", users=users)
 
+
 @app.route('/user_status_change/<action>/<user_name>')
 def user_status_change(action, user_name):
     return "not implemented"
@@ -305,7 +307,17 @@ def edit_user(user_name):
 
 @app.route('/user_delete/<user_name>')
 def delete_user(user_name):
-    return "not implemented"
+    if not 'user' in session:
+        return redirect(url_for('login'))
+    login = session['user']
+
+    # return "not implemented"
+    db = get_db()
+    sql_statement = 'DELETE FROM users WHERE name=? and name <> ?;'  # <> - różne
+    db.execute(sql_statement, (user_name, login))
+    db.commit()
+
+    return redirect(url_for('users'))
 
 
 @app.route("/new_user", methods=['GET', 'POST'])

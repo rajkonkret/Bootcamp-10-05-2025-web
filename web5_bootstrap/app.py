@@ -138,7 +138,7 @@ def login():
             return redirect(url_for('index'))
         else:
             flash("Login failed, try again")
-            return render_template('login.html')
+            return render_template('login.html', active_menu="login")
 
 @app.route("/logout")
 def logout():

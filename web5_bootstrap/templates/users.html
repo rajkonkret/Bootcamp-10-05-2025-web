@@ -71,7 +71,7 @@ Users
 
                 <a type="button" class="btn btn-danger btn-sm delete-confirm" data-bs-toggle="modal"
                    data-bs-target="#confirmDeleteModal"
-                   data-desc="{{ 'Delete user {}?'.format(user.name) }}"
+                   data-desc="Delete user {{ user.name }}?"
                    data-url="{{ url_for('delete_user', user_name=user.name) }}">
                     Delete
                 </a>

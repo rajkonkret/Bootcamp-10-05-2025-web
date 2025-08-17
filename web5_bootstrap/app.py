@@ -104,6 +104,28 @@ class UserPass:
         self.password = random_password
 
 
+@app.route("/init_app")
+def init_app():
+    db = get_db()
+    sql_statement = "select count(*) as cnt from users where is_active and is_admin;"
+    cur = db.execute(sql_statement)
+    active_admins = cur.fetchone()
+
+    if active_admins != None and active_admins['cnt'] > 0:
+        flash("Application is already set-up. Nothing to do.")
+        return redirect(url_for('index'))
+
+    # tworzymy admina gdy ie ma jeszcze w systemie
+    user_pass = UserPass()
+    user_pass.get_random_user_password()
+    db.execute("""
+    INSERT INTO users(name, email, password, is_active, is_admin)
+    VALUES (?,?,?,True,True);""",
+               (user_pass, "radek@radek.pl", user_pass.hash_password()))
+    db.commit()
+
+    flash(f"User {user_pass.user} with password {user_pass.password} has been created.")
+    return redirect(url_for('index'))
 
 
 @app.route("/")

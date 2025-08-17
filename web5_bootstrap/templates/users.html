@@ -62,7 +62,16 @@ Users
             <th scope="row">{{ user.id }}</th>
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
-            <td></td>
+            <td>
+                <a href="{{ url_for('user_status_change', action='active', user_name=user.name) }}">
+                    {% if user.is_active %}
+                    &check;
+                    {% else %}
+                    &#x25a2;
+                    {% endif %}
+                </a>
+
+            </td>
             <td></td>
             <td>
                 <a href="#" class="btn btn-primary btn-sm" role="button">Actions...</a>

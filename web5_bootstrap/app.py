@@ -285,8 +285,13 @@ def edit_transaction(transaction_id):
 
 @app.route('/users')
 def users():
-    return "not implemented"
+    # return "not implemented"
+    db = get_db()
+    sql_command = 'SELECT id, name, email, is_admin, is_active from users;'
+    cur = db.execute(sql_command)
+    users = cur.fetchall()
 
+    return render_template('users.html', active_menu="users", users=users)
 
 @app.route('/user_status_change/<action>/<user_name>')
 def user_status_change(action, user_name):
@@ -294,7 +299,7 @@ def user_status_change(action, user_name):
 
 
 @app.route('/edit_user/<user_name>', methods=['GET', 'POST'])
-def edit_user():
+def edit_user(user_name):
     return "not implemented"
 
 

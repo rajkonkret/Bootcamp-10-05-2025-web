@@ -118,6 +118,13 @@ class UserPass:
             self.password = None
             return None
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    # login = UserPass(session.get('user'))
+
+    if request.method == "GET":
+        return render_template('login.html', active_menu="login")
+
 
 @app.route("/init_app")
 def init_app():

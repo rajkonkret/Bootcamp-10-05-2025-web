@@ -302,7 +302,18 @@ def user_status_change(action, user_name):
 
 @app.route('/edit_user/<user_name>', methods=['GET', 'POST'])
 def edit_user(user_name):
-    return "not implemented"
+    # return "not implemented"
+    db = get_db()
+    cur = db.execute('SELECT name, email FROM users WHERE name=?;', (user_name,))
+    user = cur.fetchone()
+    message = None
+
+    if user == None:
+        flash("No such user")
+        return redirect(url_for('users'))
+
+    if request.method == "GET":
+        return render_template('edit_user.html', active_menu="users", user=user)
 
 
 @app.route('/user_delete/<user_name>')

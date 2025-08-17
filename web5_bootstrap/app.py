@@ -140,9 +140,9 @@ def login():
             flash("Login failed, try again")
             return render_template('login.html', active_menu="login")
 
+
 @app.route("/logout")
 def logout():
-
     if 'user' in session:
         session.pop('user', None)
         flash("Ypu are logged out")
@@ -281,6 +281,31 @@ def edit_transaction(transaction_id):
             flash(f"Transaction was updated!")
 
         return redirect(url_for('history'))
+
+
+@app.route('/users')
+def users():
+    return "not implemented"
+
+
+@app.route('/user_status_change/<action>/<user_name>')
+def user_status_change(action, user_name):
+    return "not implemented"
+
+
+@app.route('/edit_user/<user_name>', methods=['GET', 'POST'])
+def edit_user():
+    return "not implemented"
+
+
+@app.route('/user_delete/<user_name>')
+def delete_user(user_name):
+    return "not implemented"
+
+
+@app.route("/new_user", methods=['GET', 'POST'])
+def new_user():
+    return "not implemented"
 
 
 if __name__ == '__main__':

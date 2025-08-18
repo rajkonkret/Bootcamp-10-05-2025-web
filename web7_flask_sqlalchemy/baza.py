@@ -1,7 +1,7 @@
 import sqlite3
 
 try:
-    conn = sqlite3.connect("data/cantor.db")
+    conn = sqlite3.connect("data/cantor1.db")
     c = conn.cursor()
 
     query = """

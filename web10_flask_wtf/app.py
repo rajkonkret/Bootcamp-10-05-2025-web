@@ -84,6 +84,7 @@ def init():
         return "<h1>Initial configuration done!</h1>"
 
 
+# http://127.0.0.1:5000/login?next=/
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -108,6 +109,10 @@ def logout():
     logout_user()
     return "<h1>You are logged out</h1>"
 
+@app.route("/docs")
+@login_required # zabezpiecza endpoint
+def docs():
+    return f"<h1>You have access to protected docs. You are {current_user.name}</h1>"
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -45,6 +45,12 @@ class LoginForm(FlaskForm):
     remember = BooleanField('Remember me')
 
 
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url
+
+
 def get_hashed_password(password):
     os_urandom_static = b'\xee\x8b\x9c\xe6n\x96\xa9\xf5@\x99\x9c\xf3\xbf\xf1\x03\x86sr\x05\xcf\xa7\xac\xcf\xb2H\xfe\x7f\x10\x14\x9f%5\xde\xe5\xbd\xaef\x9d\xcd\xf4\xc9Be\xf9\x04\xf9\x1c}\xf9\x8a|\xe4\x92\xe1\xdb\xff~R\x0e\xb1'
     salt = hashlib.sha256(os_urandom_static).hexdigest().encode('ascii')
@@ -109,10 +115,12 @@ def logout():
     logout_user()
     return "<h1>You are logged out</h1>"
 
+
 @app.route("/docs")
-@login_required # zabezpiecza endpoint
+@login_required  # zabezpiecza endpoint
 def docs():
     return f"<h1>You have access to protected docs. You are {current_user.name}</h1>"
+
 
 if __name__ == '__main__':
     app.run(debug=True)

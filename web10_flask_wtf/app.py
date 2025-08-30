@@ -102,7 +102,7 @@ def login():
             login_user(user)
 
             next = request.args.get('next')
-            if next:
+            if next and is_safe_url(next):
                 return redirect(next)
             else:
                 return "<h1>You are authenticated!</h1>"

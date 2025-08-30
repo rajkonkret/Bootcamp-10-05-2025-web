@@ -34,6 +34,17 @@ class User(db.Model, UserMixin):
         return f"(User: {self.name}"
 
 
+@login_manager.user_loader
+def load_user(id):
+    return User.query.filter(User.id == id).first()
+
+
+class LoginForm(FlaskForm):
+    name = StringField("User name")
+    password = PasswordField("Password")
+    remember = BooleanField('Remember me')
+
+
 def get_hashed_password(password):
     os_urandom_static = b'\xee\x8b\x9c\xe6n\x96\xa9\xf5@\x99\x9c\xf3\xbf\xf1\x03\x86sr\x05\xcf\xa7\xac\xcf\xb2H\xfe\x7f\x10\x14\x9f%5\xde\xe5\xbd\xaef\x9d\xcd\xf4\xc9Be\xf9\x04\xf9\x1c}\xf9\x8a|\xe4\x92\xe1\xdb\xff~R\x0e\xb1'
     salt = hashlib.sha256(os_urandom_static).hexdigest().encode('ascii')

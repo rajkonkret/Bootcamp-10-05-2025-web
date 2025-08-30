@@ -84,5 +84,18 @@ def init():
         return "<h1>Initial configuration done!</h1>"
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        print(form.name.data, form.password.data)
+        user = User.query.filter(User.name == form.name.data).first()
+        if user != None and verify_password(user.password, form.password.data):
+            login_user(user)
+
+    return render_template('login.html', form=form)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

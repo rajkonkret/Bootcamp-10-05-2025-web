@@ -1,4 +1,5 @@
 import os
+from threading import Thread
 
 from flask import Flask, render_template
 from dotenv import load_dotenv
@@ -17,15 +18,22 @@ app.config["FLASKY_MAIL_SENDER"] = os.getenv('MAIL_USERNAME')
 
 mail = Mail(app)
 
+
+def send_async_mail(app, msg):
+    with app.app_context():
+        mail.send(msg)
+
+
 @app.route("/")
 def index():
-    send_email(
+    send_mail(
         "rajkonkret660@gmail.com",
         "Nowy User",
         "mail/new_user",
         user="Admin"
     )
     return '<h1>Hello</h1>'
+
 
 def send_mail(to, subject, template, **kwargs):
     msg = Message(
@@ -34,9 +42,14 @@ def send_mail(to, subject, template, **kwargs):
         recipients=[to]
     )
     msg.body = render_template(template + '.txt', **kwargs)
-    msg.html = render_template(template+ '.html', **kwargs)
+    msg.html = render_template(template + '.html', **kwargs)
 
-    mail.send(msg) # wysłanie maila
+    # mail.send(msg) # wysłanie maila
+    thr = Thread(target=send_async_mail, args=[app, msg])
+    thr.start()
+
+    return thr
+
 
 if __name__ == '__main__':
     app.run(debug=True)

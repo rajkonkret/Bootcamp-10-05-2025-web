@@ -1,0 +1,20 @@
+pip install django - instalacja django
+python -m django --version - sprawdzenie wersji
+django-admin --version - wersja django
+django-admin startproject myproject
+
+cd myproject
+
+python manage.py runserver - uruchomienie projektu djangowego
+gunicorn, uwsgi, uvicorn,
+gunicorn -b :5000 main:app
+
+├── manage.py ├── myproject/ # Główny plik zarządzania projektem
+# Folder aplikacji głównej
+│ ├── __init__.py
+│ ├── settings.py # Główna konfiguracja Django
+│ ├── urls.py # Routing URL
+│ ├── asgi.py
+│ ├── wsgi.py
+
+ python manage.py startapp myapp - utworzenie aplikacji django

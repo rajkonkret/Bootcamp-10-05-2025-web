@@ -61,5 +61,28 @@ def verify_password(stored_password, provided_password):
     return pwdhash == stored_password
 
 
+@app.route("/")
+def index():
+    return '<h1>Hello!</h1>'
+
+
+@app.route("/init")
+def init():
+    db.create_all()
+
+    admin = User.query.filter(User.name == 'admin').first()
+    if admin is None:
+        admin = User(id=1,
+                     name="admin",
+                     password=get_hashed_password("Passw0rd"),
+                     first_name="Radek",
+                     last_name="Kowalski")
+
+        db.session.add(admin)
+        db.session.commit()
+
+        return "<h1>Initial configuration done!</h1>"
+
+
 if __name__ == '__main__':
     app.run(debug=True)

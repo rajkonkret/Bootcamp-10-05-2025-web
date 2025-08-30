@@ -28,7 +28,7 @@ def send_async_mail(app, msg):
 def index():
     send_mail(
         "rajkonkret660@gmail.com",
-        "Nowy User",
+        " Nowy User",
         "mail/new_user",
         user="Admin"
     )

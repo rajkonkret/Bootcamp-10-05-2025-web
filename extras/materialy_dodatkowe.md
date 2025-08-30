@@ -105,3 +105,6 @@ btn-dark: Ciemny przycisk, który dobrze kontrastuje z jasnym tłem.
 btn-link: Przycisk stylizowany jako link, bez tła i obramowania, ale zachowuje właściwości przycisku.
 
 https://flask-login.readthedocs.io/en/stable/
+![img.png](img.png)
+![img_1.png](img_1.png)
+![img_2.png](img_2.png)

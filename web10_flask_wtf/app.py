@@ -1,3 +1,5 @@
+from http.cookiejar import debug
+
 from flask import Flask, render_template, url_for, request, flash, g, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 
@@ -5,6 +7,9 @@ import random
 import string
 import hashlib
 import binascii
+
+app = Flask(__name__)
+
 
 def get_hashed_password(password):
     os_urandom_static = b'\xee\x8b\x9c\xe6n\x96\xa9\xf5@\x99\x9c\xf3\xbf\xf1\x03\x86sr\x05\xcf\xa7\xac\xcf\xb2H\xfe\x7f\x10\x14\x9f%5\xde\xe5\xbd\xaef\x9d\xcd\xf4\xc9Be\xf9\x04\xf9\x1c}\xf9\x8a|\xe4\x92\xe1\xdb\xff~R\x0e\xb1'
@@ -21,3 +26,6 @@ def verify_password(stored_password, provided_password):
     pwdhash = binascii.hexlify(pwdhash).decode('ascii')
     return pwdhash == stored_password
 
+
+if __name__ == '__main__':
+    app.run(debug=True)

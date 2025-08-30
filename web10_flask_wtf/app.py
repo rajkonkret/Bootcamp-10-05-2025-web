@@ -13,7 +13,25 @@ from urllib.parse import urlparse, urljoin
 
 app = Flask(__name__)
 
-app.config.from_pyfile('config.cfg')
+app.config.from_pyfile('config.cfg')  # wczytujemy konfiguracje z pliku
+
+db = SQLAlchemy(app)  # rejestrujemy baze danych
+
+login_manager = LoginManager(app)
+login_manager.login_view = "login"
+login_manager.login_message = "First, please log in"
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    email = db.Column(db.String(100))
+    password = db.Column(db.Text)
+    first_name = db.Column(db.String(30))
+    last_name = db.Column(db.String(30))
+
+    def __repr__(self):
+        return f"(User: {self.name}"
 
 
 def get_hashed_password(password):

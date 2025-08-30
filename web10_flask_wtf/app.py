@@ -94,7 +94,19 @@ def login():
         if user != None and verify_password(user.password, form.password.data):
             login_user(user)
 
+            next = request.args.get('next')
+            if next:
+                return redirect(next)
+            else:
+                return "<h1>You are authenticated!</h1>"
+
     return render_template('login.html', form=form)
+
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return "<h1>You are logged out</h1>"
 
 
 if __name__ == '__main__':

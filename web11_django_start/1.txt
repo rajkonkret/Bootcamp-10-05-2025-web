@@ -18,3 +18,5 @@ gunicorn -b :5000 main:app
 │ ├── wsgi.py
 
  python manage.py startapp myapp - utworzenie aplikacji django
+
+ python manage.py migrate - migracja bazy danych

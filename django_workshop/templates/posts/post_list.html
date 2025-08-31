@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Posty{% endblock %}
+{% block content %}
+  <h1>Posty</h1>
+  {% if user.is_authenticated %}
+    <p><a href="{% url 'post-create' %}">+ Nowy post</a></p>
+  {% endif %}
+  <ul>
+    {% for post in object_list %}
+      <li>
+        <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+        <small>— {{ post.created|date:"Y-m-d H:i" }}</small>
+      </li>
+    {% empty %}
+      <li>Brak postów.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

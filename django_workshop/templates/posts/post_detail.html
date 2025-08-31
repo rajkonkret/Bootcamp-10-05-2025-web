@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ object.title }}{% endblock %}
+{% block content %}
+  <h1>{{ object.title }}</h1>
+  <p>{{ object.body|linebreaks }}</p>
+  <p><small>Utworzono: {{ object.created|date:"Y-m-d H:i" }}, aktualizacja: {{ object.updated|date:"Y-m-d H:i" }}</small></p>
+  {% if user.is_authenticated %}
+    <p>
+      <a href="{% url 'post-edit' object.pk %}">Edytuj</a> ·
+      <a href="{% url 'post-delete' object.pk %}">Usuń</a>
+    </p>
+  {% endif %}
+  <p><a href="{% url 'post-list' %}">← Powrót do listy</a></p>
+{% endblock %}

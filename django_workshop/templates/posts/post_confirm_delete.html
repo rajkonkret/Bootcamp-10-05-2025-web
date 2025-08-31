@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Usuń post{% endblock %}
+{% block content %}
+  <h1>Usuń post</h1>
+  <p>Czy na pewno chcesz usunąć: <strong>{{ object.title }}</strong>?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit">Tak, usuń</button>
+    <a href="{% url 'post-detail' object.pk %}">Anuluj</a>
+  </form>
+{% endblock %}
